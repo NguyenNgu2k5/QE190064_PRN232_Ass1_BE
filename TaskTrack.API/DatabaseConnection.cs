@@ -6,7 +6,8 @@ public static class DatabaseConnection
 {
     public static string Resolve(IConfiguration configuration)
     {
-        var value = configuration.GetConnectionString("DefaultConnection") ?? configuration["DATABASE_URL"];
+        var value = configuration.GetConnectionString("DefaultConnection");
+        if (string.IsNullOrWhiteSpace(value)) value = configuration["DATABASE_URL"];
         if (string.IsNullOrWhiteSpace(value)) throw new InvalidOperationException("Set ConnectionStrings:DefaultConnection or DATABASE_URL before starting the API.");
         if (!value.StartsWith("postgres://", StringComparison.OrdinalIgnoreCase) && !value.StartsWith("postgresql://", StringComparison.OrdinalIgnoreCase)) return value;
         var uri = new Uri(value);
