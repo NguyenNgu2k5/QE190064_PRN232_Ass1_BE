@@ -17,3 +17,7 @@ On Render, set `DATABASE_URL`, `CORS_ORIGINS` to the frontend URL, and
 Swagger is available at `/swagger`.
 
 The API exposes public CRUD for departments, projects, tasks, and tags. Tasks use soft-delete; departments, projects, and tags reject deletes while related records exist.
+
+## Entity relationship diagram
+
+![TaskTrack database ERD](docs/tasktrack-erd.svg)

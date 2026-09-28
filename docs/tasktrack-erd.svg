@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">TaskTrack entity relationship diagram</title>
+  <desc id="desc">Department has many Projects, Project has many Tasks, and Tasks have many Tags through TaskTag.</desc>
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#14392b" flood-opacity=".12"/></filter>
+    <style>
+      .title{font:700 30px Arial,sans-serif;fill:#14241e}.subtitle{font:15px Arial,sans-serif;fill:#66756e}.box{fill:#fff;stroke:#cbd9d0;stroke-width:2;filter:url(#shadow)}.head{fill:#132d2d}.headText{font:700 18px Arial,sans-serif;fill:#fff}.field{font:14px Consolas,monospace;fill:#33473e}.key{font-weight:700;fill:#167a52}.line{fill:none;stroke:#61776c;stroke-width:2}.cardinality{font:700 14px Consolas,monospace;fill:#e76f51}.legend{font:13px Arial,sans-serif;fill:#66756e}
+    </style>
+  </defs>
+  <rect width="1200" height="760" fill="#f3f6f1"/>
+  <text x="40" y="45" class="title">TaskTrack database ERD</text>
+  <text x="40" y="70" class="subtitle">PostgreSQL schema · primary and foreign keys shown explicitly</text>
+
+  <path class="line" d="M370 190 H435"/><text x="382" y="181" class="cardinality">1</text><text x="414" y="181" class="cardinality">N</text>
+  <path class="line" d="M765 190 H830"/><text x="777" y="181" class="cardinality">1</text><text x="809" y="181" class="cardinality">N</text>
+  <path class="line" d="M995 450 V470 H850 V490"/><text x="1005" y="465" class="cardinality">1</text><text x="860" y="482" class="cardinality">N</text>
+  <path class="line" d="M450 545 H650"/><text x="462" y="536" class="cardinality">1</text><text x="629" y="536" class="cardinality">N</text>
+
+  <g transform="translate(40 100)">
+    <rect class="box" width="330" height="220" rx="18"/><path class="head" d="M18 0H312a18 18 0 0 1 18 18v38H0V18A18 18 0 0 1 18 0Z"/><text x="20" y="36" class="headText">Department</text>
+    <text x="20" y="84" class="field key">PK  DepartmentID · int</text><text x="20" y="112" class="field">    DepartmentName · varchar(100)</text><text x="20" y="140" class="field">    DepartmentDescription · varchar(300)</text><text x="20" y="168" class="field">    IsActive · boolean</text>
+  </g>
+  <g transform="translate(435 90)">
+    <rect class="box" width="330" height="330" rx="18"/><path class="head" d="M18 0H312a18 18 0 0 1 18 18v38H0V18A18 18 0 0 1 18 0Z"/><text x="20" y="36" class="headText">Project</text>
+    <text x="20" y="84" class="field key">PK  ProjectID · int</text><text x="20" y="112" class="field">    ProjectName · varchar(200)</text><text x="20" y="140" class="field">    Description · text?</text><text x="20" y="168" class="field">    StartDate · date</text><text x="20" y="196" class="field">    EndDate · date?</text><text x="20" y="224" class="field">    Status · smallint</text><text x="20" y="252" class="field key">FK  DepartmentID · int</text><text x="20" y="280" class="field">    IsActive · boolean</text><text x="20" y="308" class="field">    CreatedDate · timestamp</text>
+  </g>
+  <g transform="translate(830 90)">
+    <rect class="box" width="330" height="360" rx="18"/><path class="head" d="M18 0H312a18 18 0 0 1 18 18v38H0V18A18 18 0 0 1 18 0Z"/><text x="20" y="36" class="headText">Task</text>
+    <text x="20" y="84" class="field key">PK  TaskID · int</text><text x="20" y="112" class="field">    Title · varchar(300)</text><text x="20" y="140" class="field">    Description · text?</text><text x="20" y="168" class="field">    Status · smallint</text><text x="20" y="196" class="field">    Priority · smallint</text><text x="20" y="224" class="field">    DueDate · date?</text><text x="20" y="252" class="field key">FK  ProjectID · int</text><text x="20" y="280" class="field">    IsActive · boolean</text><text x="20" y="308" class="field">    CreatedDate · timestamp</text><text x="20" y="336" class="field">    ModifiedDate · timestamp?</text>
+  </g>
+  <g transform="translate(120 470)">
+    <rect class="box" width="330" height="180" rx="18"/><path class="head" d="M18 0H312a18 18 0 0 1 18 18v38H0V18A18 18 0 0 1 18 0Z"/><text x="20" y="36" class="headText">Tag</text>
+    <text x="20" y="84" class="field key">PK  TagID · int</text><text x="20" y="112" class="field">    TagName · varchar(50)</text><text x="20" y="140" class="field">    Color · varchar(7)?</text>
+  </g>
+  <g transform="translate(650 490)">
+    <rect class="box" width="330" height="160" rx="18"/><path class="head" d="M18 0H312a18 18 0 0 1 18 18v38H0V18A18 18 0 0 1 18 0Z"/><text x="20" y="36" class="headText">TaskTag</text>
+    <text x="20" y="88" class="field key">PK / FK  TaskID · int</text><text x="20" y="122" class="field key">PK / FK  TagID · int</text>
+  </g>
+  <text x="40" y="720" class="legend">Legend: PK = primary key · FK = foreign key · ? = nullable · TaskTag resolves the Task–Tag many-to-many relationship.</text>
+</svg>
