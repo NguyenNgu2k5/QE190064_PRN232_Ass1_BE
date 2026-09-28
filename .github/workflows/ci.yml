@@ -1,0 +1,19 @@
+name: Backend CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - run: dotnet restore QE190064_PRN232_Ass1_BE.sln
+      - run: dotnet build QE190064_PRN232_Ass1_BE.sln --configuration Release --no-restore
