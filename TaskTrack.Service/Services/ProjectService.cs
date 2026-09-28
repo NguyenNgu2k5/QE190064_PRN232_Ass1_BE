@@ -45,6 +45,10 @@ public class ProjectService(ProjectRepository repo, DepartmentRepository departm
         repo.Remove(item); await repo.SaveAsync(ct);
     }
 
-    private static void ValidateDates(DateOnly start, DateOnly? end) { if (end.HasValue && end < start) throw new InvalidOperationException("EndDate cannot be before StartDate."); }
+    private static void ValidateDates(DateOnly start, DateOnly? end)
+    {
+        if (start == default) throw new InvalidOperationException("StartDate is required.");
+        if (end.HasValue && end < start) throw new InvalidOperationException("EndDate cannot be before StartDate.");
+    }
     private static ProjectResponse Map(Project x) => new(x.ProjectId, x.ProjectName, x.Description, x.StartDate, x.EndDate, x.Status, x.DepartmentId, x.Department?.DepartmentName ?? string.Empty, x.IsActive, x.CreatedDate, x.Tasks.Select(t => new TaskSummary(t.TaskId, t.Title, t.Status, t.Priority, t.DueDate)).ToList());
 }
