@@ -11,14 +11,20 @@ public class TagService(TagRepository repo) : ITagService
 
     public async Task<TagResponse> CreateAsync(TagRequest request, CancellationToken ct)
     {
-        var item = new Tag { TagName = request.TagName.Trim(), Color = request.Color?.Trim() };
+        var name = request.TagName.Trim();
+        if (name.Length == 0) throw new InvalidOperationException("TagName is required.");
+        if (await repo.NameExistsAsync(name, ct: ct)) throw new InvalidOperationException("TagName already exists.");
+        var item = new Tag { TagName = name, Color = request.Color?.Trim() };
         await repo.AddAsync(item, ct); await repo.SaveAsync(ct); return Map(item);
     }
 
     public async Task<TagResponse> UpdateAsync(int id, TagRequest request, CancellationToken ct)
     {
         var item = await repo.FindTrackedAsync(id, ct) ?? throw new KeyNotFoundException("Tag not found.");
-        item.TagName = request.TagName.Trim(); item.Color = request.Color?.Trim(); await repo.SaveAsync(ct); return Map(item);
+        var name = request.TagName.Trim();
+        if (name.Length == 0) throw new InvalidOperationException("TagName is required.");
+        if (await repo.NameExistsAsync(name, id, ct)) throw new InvalidOperationException("TagName already exists.");
+        item.TagName = name; item.Color = request.Color?.Trim(); await repo.SaveAsync(ct); return Map(item);
     }
 
     public async Task DeleteAsync(int id, CancellationToken ct)

@@ -8,6 +8,7 @@ public class TagRepository(TaskManagementDbContext db)
     public Task<List<Tag>> GetAllAsync(CancellationToken ct = default) => db.Tags.AsNoTracking().OrderBy(x => x.TagName).ToListAsync(ct);
     public Task<Tag?> GetByIdAsync(int id, CancellationToken ct = default) => db.Tags.AsNoTracking().FirstOrDefaultAsync(x => x.TagId == id, ct);
     public Task<bool> ExistsAsync(int id, CancellationToken ct = default) => db.Tags.AnyAsync(x => x.TagId == id, ct);
+    public Task<bool> NameExistsAsync(string name, int? exceptId = null, CancellationToken ct = default) => db.Tags.AnyAsync(x => x.TagName.ToLower() == name.ToLower() && (!exceptId.HasValue || x.TagId != exceptId.Value), ct);
     public Task<bool> HasTasksAsync(int id, CancellationToken ct = default) => db.TaskTags.AnyAsync(x => x.TagId == id, ct);
     public Task AddAsync(Tag item, CancellationToken ct = default) => db.Tags.AddAsync(item, ct).AsTask();
     public Task<Tag?> FindTrackedAsync(int id, CancellationToken ct = default) => db.Tags.FirstOrDefaultAsync(x => x.TagId == id, ct);

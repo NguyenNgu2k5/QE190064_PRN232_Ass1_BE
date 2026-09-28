@@ -23,6 +23,7 @@ public class ProjectService(ProjectRepository repo, DepartmentRepository departm
 
     public async Task<ProjectResponse> CreateAsync(ProjectRequest request, CancellationToken ct)
     {
+        if (request.ProjectName.Trim().Length == 0) throw new InvalidOperationException("ProjectName is required.");
         if (!await departments.ExistsAsync(request.DepartmentId, ct)) throw new InvalidOperationException("Department does not exist.");
         ValidateDates(request.StartDate, request.EndDate);
         var item = new Project { ProjectName = request.ProjectName.Trim(), Description = request.Description?.Trim(), StartDate = request.StartDate, EndDate = request.EndDate, Status = request.Status, DepartmentId = request.DepartmentId };
@@ -32,6 +33,7 @@ public class ProjectService(ProjectRepository repo, DepartmentRepository departm
     public async Task<ProjectResponse> UpdateAsync(int id, ProjectRequest request, CancellationToken ct)
     {
         var item = await repo.FindTrackedAsync(id, ct) ?? throw new KeyNotFoundException("Project not found.");
+        if (request.ProjectName.Trim().Length == 0) throw new InvalidOperationException("ProjectName is required.");
         if (!await departments.ExistsAsync(request.DepartmentId, ct)) throw new InvalidOperationException("Department does not exist.");
         ValidateDates(request.StartDate, request.EndDate);
         item.ProjectName = request.ProjectName.Trim(); item.Description = request.Description?.Trim(); item.StartDate = request.StartDate; item.EndDate = request.EndDate; item.Status = request.Status; item.DepartmentId = request.DepartmentId;

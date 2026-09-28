@@ -13,14 +13,18 @@ public class DepartmentService(DepartmentRepository repo) : IDepartmentService
 
     public async Task<DepartmentResponse> CreateAsync(DepartmentRequest request, CancellationToken ct)
     {
-        var item = new Department { DepartmentName = request.DepartmentName.Trim(), DepartmentDescription = request.DepartmentDescription.Trim() };
+        var name = request.DepartmentName.Trim(); var description = request.DepartmentDescription.Trim();
+        if (name.Length == 0 || description.Length == 0) throw new InvalidOperationException("Department name and description are required.");
+        var item = new Department { DepartmentName = name, DepartmentDescription = description };
         await repo.AddAsync(item, ct); await repo.SaveAsync(ct); return await GetByIdAsync(item.DepartmentId, ct);
     }
 
     public async Task<DepartmentResponse> UpdateAsync(int id, DepartmentRequest request, CancellationToken ct)
     {
         var item = await repo.FindTrackedAsync(id, ct) ?? throw new KeyNotFoundException("Department not found.");
-        item.DepartmentName = request.DepartmentName.Trim(); item.DepartmentDescription = request.DepartmentDescription.Trim();
+        var name = request.DepartmentName.Trim(); var description = request.DepartmentDescription.Trim();
+        if (name.Length == 0 || description.Length == 0) throw new InvalidOperationException("Department name and description are required.");
+        item.DepartmentName = name; item.DepartmentDescription = description;
         await repo.SaveAsync(ct); return await GetByIdAsync(id, ct);
     }
 

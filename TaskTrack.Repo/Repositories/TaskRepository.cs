@@ -11,8 +11,11 @@ public class TaskRepository(TaskManagementDbContext db)
     public Task<bool> ExistsAsync(int id, CancellationToken ct = default) => db.Tasks.AnyAsync(x => x.TaskId == id, ct);
     public Task AddAsync(TaskItem item, CancellationToken ct = default) => db.Tasks.AddAsync(item, ct).AsTask();
     public Task<TaskItem?> FindTrackedAsync(int id, CancellationToken ct = default) => db.Tasks.Include(x => x.TaskTags).FirstOrDefaultAsync(x => x.TaskId == id, ct);
-    public void RemoveTags(TaskItem item) => db.TaskTags.RemoveRange(item.TaskTags);
     public Task<List<Tag>> GetTagsAsync(IEnumerable<int> ids, CancellationToken ct = default) => db.Tags.Where(x => ids.Contains(x.TagId)).ToListAsync(ct);
-    public void AddTagLinks(IEnumerable<TaskTag> links) => db.TaskTags.AddRange(links);
+    public async Task ReplaceTagsAsync(int taskId, IEnumerable<int> tagIds, CancellationToken ct = default)
+    {
+        await db.TaskTags.Where(x => x.TaskId == taskId).ExecuteDeleteAsync(ct);
+        db.TaskTags.AddRange(tagIds.Select(tagId => new TaskTag { TaskId = taskId, TagId = tagId }));
+    }
     public Task SaveAsync(CancellationToken ct = default) => db.SaveChangesAsync(ct);
 }
