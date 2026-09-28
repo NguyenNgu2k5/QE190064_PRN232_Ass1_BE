@@ -4,11 +4,14 @@ ASP.NET Core 8 API for the PRN232 Task Management assignment.
 
 ## Run locally
 
-Set `DATABASE_URL` to the existing PostgreSQL database `qe190064_prn232_ass1`, then run:
+Store the local PostgreSQL connection outside Git, then run the API:
 
 ```powershell
+dotnet user-secrets set --project TaskTrack.API "ConnectionStrings:DefaultConnection" "Host=localhost;Port=5432;Database=qe190064_prn232_ass1;Username=postgres;Password=YOUR_PASSWORD"
 dotnet run --project TaskTrack.API
 ```
+
+On Render, set `DATABASE_URL` instead of using User Secrets.
 
 Swagger is available at `/swagger`.
 
