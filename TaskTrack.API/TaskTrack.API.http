@@ -1,6 +1,6 @@
 @TaskTrack.API_HostAddress = http://localhost:5100
 
-GET {{TaskTrack.API_HostAddress}}/weatherforecast/
+GET {{TaskTrack.API_HostAddress}}/api/departments
 Accept: application/json
 
 ###

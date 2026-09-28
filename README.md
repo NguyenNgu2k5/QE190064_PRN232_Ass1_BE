@@ -11,7 +11,8 @@ dotnet user-secrets set --project TaskTrack.API "ConnectionStrings:DefaultConnec
 dotnet run --project TaskTrack.API
 ```
 
-On Render, set `DATABASE_URL` instead of using User Secrets.
+On Render, set `DATABASE_URL`, `CORS_ORIGINS` to the frontend URL, and
+`ASPNETCORE_ENVIRONMENT=Production` instead of using User Secrets.
 
 Swagger is available at `/swagger`.
 
